@@ -18,22 +18,27 @@
 
 // Set Cursor Position
 #define CURSOR_HOME "\033[1;1H"
-#define CURSOR_SET_ROW(x) "\033[%d;1H"
-#define CURSOR_SET_COL(y) "\033[1;%dH"
-#define CURSOR_SET_ROW_COL(x, y) "\033[%d;%dH"
+#define CURSOR_SET_ROW "\033[%d;1H"
+#define CURSOR_SET_COL "\033[1;%dH"
+#define CURSOR_SET_ROW_COL "\033[%d;%dH"
 
 // Scroll
 #define SCROLL_UP "\033[S"
 #define SCROLL_DOWN "\033[T"
+
+// Alternate Screen Buffer
+#define ALTERNATE_SCREEN_BUFFER "\033[?1049h"
+#define NORMAL_SCREEN_BUFFER "\033[?1049l"
 
 // Erase
 #define ERASE_LINE "\033[2K"
 #define ERASE_LINE_LEFT "\033[1K"
 #define ERASE_LINE_RIGHT "\033[0K"
 
-#define ERASE_SCREEN "\033[2J\033[3J"
+#define ERASE_SCREEN "\033[2J"
 #define ERASE_SCREEN_DOWN "\033[0J"
 #define ERASE_SCREEN_UP "\033[1J"
+#define ERASE_SCREEN_BUFFER "\033[3J"
 
 // Set Graphics Mode
 #define SET_GRAPHICS_MODE "\033[%dm"
@@ -98,7 +103,5 @@
 #define BG_BRIGHT_MAGENTA "\033[105m"
 #define BG_BRIGHT_CYAN "\033[106m"
 #define BG_BRIGHT_WHITE "\033[107m"
-
-
 
 #endif // ANSI_CODES_H

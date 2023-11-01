@@ -5,31 +5,33 @@ SRC_DIR=src/code
 HEADER_DIR=src/includes
 BUILD_DIR=build
 
-EXECUTABLE=calculator
-PROG=$(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(wildcard $(SRC_DIR)/*.c))
+EXECUTABLE=$(BUILD_DIR)/calculator
+SRCS=$(wildcard $(SRC_DIR)/*.c)
+OBJS=$(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
+HEADERS=$(wildcard $(HEADER_DIR)/*.h)
 
 all: $(BUILD_DIR) $(EXECUTABLE)
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -I $(HEADER_DIR) -c $< -o $@
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
+	$(CC) $(CFLAGS) -I$(HEADER_DIR) -c $< -o $@
 
-$(EXECUTABLE): $(PROG)
-	$(CC) $(CFLAGS) -o $(BUILD_DIR)/$@ $^
+$(EXECUTABLE): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
 
-.PHONY: clean run install uninstall all
+.PHONY: clean run install uninstall 
 
 clean:
 	rm -rf $(BUILD_DIR)
 
 run: $(EXECUTABLE)
-	./$(BUILD_DIR)/$(EXECUTABLE)
+	./$(EXECUTABLE)
 
-install: $(EXECUTABLE)
-	cp $(BUILD_DIR)/$(EXECUTABLE) $(HOME)/.local/bin
+install: $(BUILD_DIR) $(EXECUTABLE)
+	cp $(EXECUTABLE) $(HOME)/.local/bin
 
 uninstall:
-	rm -f $(HOME)/.local/bin/$(EXECUTABLE)
+	rm -f $(HOME)/.local/bin/$(notdir $(EXECUTABLE))
