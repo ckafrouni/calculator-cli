@@ -16,10 +16,10 @@ typedef enum
 typedef struct
 {
     InputMode mode;
-    int cursor_x;
-    int cursor_y;
-    int window_width;
-    int window_height;
+    size_t cursor_x;
+    size_t cursor_y;
+    size_t window_width;
+    size_t window_height;
     struct termios oldt;
     struct termios newt;
 
@@ -37,7 +37,7 @@ void restore_editor(EditorState *state);
 void free_editor_state(EditorState *state);
 
 void clear_input_buffer(EditorState *state);
-void clear_content_buffer(EditorState *state);
+void clear_history_buffer(EditorState *state);
 void update_window_size(EditorState *state);
 
 

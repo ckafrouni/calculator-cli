@@ -17,6 +17,10 @@ EditorState *create_editor()
     state->history_buffer_size = 0;
     state->input_buffer_size = 0;
 
+    // Initialize the cursor position
+    state->cursor_x = 0;
+    state->cursor_y = 0;
+
     // Get the current window size
     update_window_size(state);
 

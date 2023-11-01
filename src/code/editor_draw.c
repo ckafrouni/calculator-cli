@@ -61,4 +61,7 @@ void draw_tui(EditorState *state)
     draw_bottom_bar(state);
     draw_mode(state);
     draw_input(state);
+
+    // Move the cursor to the correct position
+    printf(CURSOR_SET_ROW_COL, state->cursor_y + 1, state->cursor_x + 1);
 }

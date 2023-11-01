@@ -18,9 +18,9 @@
 
 // Set Cursor Position
 #define CURSOR_HOME "\033[1;1H"
-#define CURSOR_SET_ROW "\033[%d;1H"
-#define CURSOR_SET_COL "\033[1;%dH"
-#define CURSOR_SET_ROW_COL "\033[%d;%dH"
+#define CURSOR_SET_ROW "\033[%lu;1H"
+#define CURSOR_SET_COL "\033[1;%luH"
+#define CURSOR_SET_ROW_COL "\033[%lu;%luH"
 
 // Scroll
 #define SCROLL_UP "\033[S"

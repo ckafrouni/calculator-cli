@@ -10,17 +10,35 @@
 
 int handle_input_normal(char input, EditorState *state)
 {
-    if (input == 'q')
+    switch (input)
     {
+    case 'h':
+        if (state->cursor_x > 0)
+            state->cursor_x--;
+        break;
+    case 'j':
+        if (state->cursor_y < state->history_buffer_size - 1)
+            state->cursor_y++;
+        break;
+    case 'k':
+        if (state->cursor_y > 0)
+            state->cursor_y--;
+        break;
+    case 'l':
+        if (state->cursor_x < state->history_buffer_size - 1)
+            state->cursor_x++;
+        break;
+
+    case 'q':
         return 1;
-    }
-    else if (input == 'i')
-    {
+    case 'i':
         state->mode = INSERT_MODE;
-    }
-    else if (input == 'c')
-    {
+        // state->cursor_x = 0;
+        // state->cursor_y = 0;
+        break;
+    case 'c':
         clear_history_buffer(state);
+        break;
     }
     return 0;
 }
@@ -31,12 +49,15 @@ int handle_input_insert(char input, EditorState *state)
     {
     case 27: // ESC
         state->mode = NORMAL_MODE;
+        // save the current cursor position
+        // state->cursor_x = strlen(state->input_buffer);
+        // state->cursor_y = state->history_buffer_size - 1;
         break;
 
     case '\n':
         if (state->input_buffer_size == 0)
             break;
-        
+
         if (state->history_buffer_size == HISTORY_BUFFER_SIZE)
         {
             clear_history_buffer(state);
@@ -54,7 +75,7 @@ int handle_input_insert(char input, EditorState *state)
     case 127: // BACKSPACE
         state->input_buffer[strlen(state->input_buffer) - 1] = '\0';
         break;
-    
+
     default:
         if (state->input_buffer_size == INITIAL_BUFFER_SIZE - 1)
             break;
