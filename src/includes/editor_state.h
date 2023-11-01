@@ -2,6 +2,7 @@
 #define EDITOR_STATE_H
 
 #include <stdlib.h>
+#include <sys/ioctl.h>
 #include <termios.h>
 
 #define INITIAL_BUFFER_SIZE 1024
@@ -13,13 +14,28 @@ typedef enum
     INSERT_MODE,
 } InputMode;
 
+#define MODE_STRING(mode) (mode == NORMAL_MODE ? "NORMAL" : "INSERT")
+
+typedef struct
+{
+    size_t x;
+    size_t y;
+} NormalCursor;
+
+typedef struct
+{
+    size_t x;
+} InputCursor;
+
 typedef struct
 {
     InputMode mode;
-    size_t cursor_x;
-    size_t cursor_y;
-    size_t window_width;
-    size_t window_height;
+
+    NormalCursor ncursor;
+    InputCursor icursor;
+
+    struct winsize ws;
+
     struct termios oldt;
     struct termios newt;
 
@@ -30,7 +46,6 @@ typedef struct
     size_t input_buffer_size;
 } EditorState;
 
-#define MODE_STRING(mode) (mode == NORMAL_MODE ? "NORMAL" : "INSERT")
 
 EditorState *create_editor();
 void restore_editor(EditorState *state);
@@ -40,6 +55,13 @@ void clear_input_buffer(EditorState *state);
 void clear_history_buffer(EditorState *state);
 void update_window_size(EditorState *state);
 
+void inc_ncursor_x(EditorState *state);
+void inc_ncursor_y(EditorState *state);
+void dec_ncursor_x(EditorState *state);
+void dec_ncursor_y(EditorState *state);
+void home_ncursor(EditorState *state);
 
+void inc_icursor_x(EditorState *state);
+void dec_icursor_x(EditorState *state);
 
 #endif // EDIT0R_STATE_H

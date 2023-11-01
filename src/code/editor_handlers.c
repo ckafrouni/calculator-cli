@@ -13,31 +13,27 @@ int handle_input_normal(char input, EditorState *state)
     switch (input)
     {
     case 'h':
-        if (state->cursor_x > 0)
-            state->cursor_x--;
+        dec_ncursor_x(state);
         break;
     case 'j':
-        if (state->cursor_y < state->history_buffer_size - 1)
-            state->cursor_y++;
+        inc_ncursor_y(state);
         break;
     case 'k':
-        if (state->cursor_y > 0)
-            state->cursor_y--;
+        dec_ncursor_y(state);
         break;
     case 'l':
-        if (state->cursor_x < state->history_buffer_size - 1)
-            state->cursor_x++;
+        inc_ncursor_x(state);
         break;
 
     case 'q':
         return 1;
+
     case 'i':
         state->mode = INSERT_MODE;
-        // state->cursor_x = 0;
-        // state->cursor_y = 0;
         break;
     case 'c':
         clear_history_buffer(state);
+        home_ncursor(state);
         break;
     }
     return 0;
@@ -81,6 +77,7 @@ int handle_input_insert(char input, EditorState *state)
             break;
         strncat(state->input_buffer, &input, 1);
         state->input_buffer_size++;
+        state->icursor.x++;
         break;
     }
 

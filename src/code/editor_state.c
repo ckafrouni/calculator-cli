@@ -17,9 +17,11 @@ EditorState *create_editor()
     state->history_buffer_size = 0;
     state->input_buffer_size = 0;
 
-    // Initialize the cursor position
-    state->cursor_x = 0;
-    state->cursor_y = 0;
+    // Cursor positions
+    state->ncursor.x = 1;
+    state->ncursor.y = 1;
+
+    state->icursor.x = 1;
 
     // Get the current window size
     update_window_size(state);
@@ -62,8 +64,47 @@ void clear_history_buffer(EditorState *state)
 
 void update_window_size(EditorState *state)
 {
-    struct winsize w;
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-    state->window_width = w.ws_col;
-    state->window_height = w.ws_row;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &(state->ws));
+}
+
+void inc_ncursor_x(EditorState *state)
+{
+    if (state->ncursor.x < state->ws.ws_col - 1)
+        state->ncursor.x++;
+}
+
+void inc_ncursor_y(EditorState *state)
+{
+    if (state->ncursor.y < state->ws.ws_row - 2)
+        state->ncursor.y++;
+}
+
+void dec_ncursor_x(EditorState *state)
+{
+    if (state->ncursor.x > 1)
+        state->ncursor.x--;
+}
+
+void dec_ncursor_y(EditorState *state)
+{
+    if (state->ncursor.y > 1)
+        state->ncursor.y--;
+}
+
+void home_ncursor(EditorState *state)
+{
+    state->ncursor.x = 1;
+    state->ncursor.y = 1;
+}
+
+void inc_icursor_x(EditorState *state)
+{
+    if (state->icursor.x < state->ws.ws_col - 1)
+        state->icursor.x++;
+}
+
+void dec_icursor_x(EditorState *state)
+{
+    if (state->icursor.x > 1)
+        state->icursor.x--;
 }

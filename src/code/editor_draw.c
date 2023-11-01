@@ -17,7 +17,7 @@ void reset_graphics()
 void draw_history(EditorState *state)
 {
     // Draw the history buffer (The last history_viewport_heigth lines)
-    size_t history_viewport_heigth = state->window_height - 2;
+    size_t history_viewport_heigth = state->ws.ws_row - 2;
     size_t start = state->history_buffer_size > history_viewport_heigth ? state->history_buffer_size - history_viewport_heigth : 0;
     size_t end = state->history_buffer_size;
     printf(CURSOR_SET_ROW_COL, 1, 1);
@@ -30,8 +30,8 @@ void draw_history(EditorState *state)
 void draw_bottom_bar(EditorState *state)
 {
     // Draw the bottom bar
-    printf(CURSOR_SET_ROW_COL, state->window_height - 1, 1);
-    printf(BG_CYAN "%*s", state->window_width - 1, "");
+    printf(CURSOR_SET_ROW_COL, state->ws.ws_row - 1, 1);
+    printf(BG_CYAN "%*s", state->ws.ws_col - 1, "");
     printf(CURSOR_LINE_START);
 
     // Status section
@@ -43,7 +43,7 @@ void draw_bottom_bar(EditorState *state)
 
 void draw_mode(EditorState *state)
 {
-    printf(CURSOR_SET_ROW_COL, state->window_height - 1, 1);
+    printf(CURSOR_SET_ROW_COL, state->ws.ws_row - 1, 1);
     printf(BG_YELLOW FG_BLACK " %s " BG_BLUE " #> " BG_CYAN " ", MODE_STRING(state->mode));
 }
 
@@ -62,6 +62,13 @@ void draw_tui(EditorState *state)
     draw_mode(state);
     draw_input(state);
 
-    // Move the cursor to the correct position
-    printf(CURSOR_SET_ROW_COL, state->cursor_y + 1, state->cursor_x + 1);
+    // Move the cursor to the correct position depending on the mode
+    if (state->mode == NORMAL_MODE)
+    {
+        printf(CURSOR_SET_ROW_COL, state->ncursor.y, state->ncursor.x);
+    }
+    else
+    {
+        printf(CURSOR_SET_ROW_COL, state->ws.ws_row - 1, state->icursor.x + strlen(MODE_STRING(state->mode)) + 6);
+    }
 }
