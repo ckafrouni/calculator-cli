@@ -18,10 +18,12 @@ typedef struct
     char *style;
 } Block;
 
-typedef struct {
+typedef struct
+{
 } EditorWindow;
 
-typedef struct {
+typedef struct
+{
     Block mode;
     Block glyph;
     Block input;
